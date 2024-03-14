@@ -32,6 +32,8 @@ gem "jbuilder"
 # Use Redis adapter to run Action Cable in production
 gem "redis", ">= 4.0.1"
 
+gem 'esbuild-rails'
+
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 
@@ -71,3 +73,7 @@ end
 
 gem "graphql", "~> 2.2"
 gem "graphiql-rails", group: :development
+
+gem "react-rails", "= 3.2"
+
+gem "shakapacker", "= 7.2"
