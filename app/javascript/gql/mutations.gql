@@ -1,0 +1,23 @@
+mutation CreatePost(
+  $title: String!
+  $notes: String!
+  $mediaType: String!
+  $author: ID!
+) {
+  createPost(
+    input: {
+      title: $title
+      notes: $notes
+      mediaType: $mediaType
+      author: $author
+    }
+  ) {
+    id
+    title
+    notes
+    mediaType
+    author {
+      id
+    }
+  }
+}

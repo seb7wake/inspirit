@@ -27,10 +27,26 @@ module Types
       Post.all
     end
 
+    field :post, PostType, null: false do
+      argument :id, ID, required: true
+    end
+
+    def post(id:)
+      Post.find(id)
+    end
+
     field :users, [UserType], null: false
 
     def users
       User.all
+    end
+
+    field :user, UserType, null: true do
+      argument :id, ID, required: true
+    end
+
+    def user(id:)
+      User.find(id)
     end
   end
 end
