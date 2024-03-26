@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { Form, Button, Dropdown } from "react-bootstrap";
-import { useCreatePostMutation } from "../../generated/graphql";
+import { User, useCreatePostMutation } from "../../generated/graphql";
+import { useReactiveVar } from "@apollo/client";
+import { currentUser } from "../../context";
+import { useNavigate } from "react-router-dom";
 
-const CreatePost = ({ user }) => {
+const CreatePost = () => {
   const [createPost] = useCreatePostMutation();
+  const navigate = useNavigate();
+  const user = useReactiveVar<User | null>(currentUser);
   const [title, setTitle] = useState("");
   const [mediaType, setMediaType] = useState("Book");
   const [notes, setNotes] = useState("");
@@ -15,11 +20,16 @@ const CreatePost = ({ user }) => {
         title: title,
         mediaType: mediaType,
         notes: notes,
-        author: "1",
+        author: user?.id,
       },
     });
     console.log(res);
+    navigate("/");
   };
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>

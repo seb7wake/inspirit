@@ -23,6 +23,7 @@ export type Incremental<T> =
       [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
     };
 const defaultOptions = {} as const;
+/** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string };
   String: { input: string; output: string };
@@ -67,13 +68,13 @@ export type MutationCreateUserArgs = {
 
 export type Post = {
   __typename?: "Post";
-  author?: Maybe<User>;
+  author: User;
   createdAt: Scalars["ISO8601DateTime"]["output"];
   id: Scalars["ID"]["output"];
   link?: Maybe<Scalars["String"]["output"]>;
-  mediaType?: Maybe<Scalars["String"]["output"]>;
-  notes?: Maybe<Scalars["String"]["output"]>;
-  title?: Maybe<Scalars["String"]["output"]>;
+  mediaType: Scalars["String"]["output"];
+  notes: Scalars["String"]["output"];
+  title: Scalars["String"]["output"];
   updatedAt: Scalars["ISO8601DateTime"]["output"];
 };
 
@@ -114,10 +115,10 @@ export type CreatePostMutation = {
   createPost?: {
     __typename?: "Post";
     id: string;
-    title?: string | null;
-    notes?: string | null;
-    mediaType?: string | null;
-    author?: { __typename?: "User"; id: string } | null;
+    title: string;
+    notes: string;
+    mediaType: string;
+    author: { __typename?: "User"; id: string };
   } | null;
 };
 
@@ -128,10 +129,16 @@ export type GetPostsQuery = {
   posts: Array<{
     __typename?: "Post";
     id: string;
-    title?: string | null;
-    notes?: string | null;
-    mediaType?: string | null;
+    title: string;
+    notes: string;
+    mediaType: string;
     createdAt: any;
+    author: {
+      __typename?: "User";
+      id: string;
+      name?: string | null;
+      email?: string | null;
+    };
   }>;
 };
 
@@ -214,6 +221,11 @@ export const GetPostsDocument = gql`
       notes
       mediaType
       createdAt
+      author {
+        id
+        name
+        email
+      }
     }
   }
 `;

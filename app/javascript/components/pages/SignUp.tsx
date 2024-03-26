@@ -1,69 +1,44 @@
 import React, { useState } from "react";
 import { currentUser } from "../../context";
 import { useNavigate } from "react-router-dom";
+import { SignUpUser } from "../../api/auth";
 
 const SignUp: React.FC = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const navigate = useNavigate();
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(email, password);
-    await fetch("http://localhost:3000/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-Token": (
-          document.querySelector("[name='csrf-token']") as HTMLMetaElement
-        )?.content,
-      },
-      body: JSON.stringify({
-        user: { name: "test", email: email, password: password },
-      }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          const token = response.headers.get("Authorization");
-          localStorage.setItem("jwt", token);
-          return response.json();
-        }
-        throw new Error("Network response was not ok.");
-      })
-      .then((response) => {
-        currentUser(response.data);
-        console.log("response:", response.data);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.error(
-          "There has been a problem with your fetch operation:",
-          error
-        );
-      });
-  };
-
-  const handlePasswordConfirmationChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setPasswordConfirmation(e.target.value);
+    if (password !== passwordConfirmation) {
+      alert("Passwords do not match.");
+      return;
+    }
+    await SignUpUser({ name, email, password });
+    navigate("/");
   };
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <label>
+          Name:
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </label>
+        <br />
+        <label>
           Email:
-          <input type="email" value={email} onChange={handleEmailChange} />
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </label>
         <br />
         <label>
@@ -71,7 +46,7 @@ const SignUp: React.FC = () => {
           <input
             type="password"
             value={password}
-            onChange={handlePasswordChange}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </label>
         <br />
@@ -80,7 +55,7 @@ const SignUp: React.FC = () => {
           <input
             type="password"
             value={passwordConfirmation}
-            onChange={handlePasswordConfirmationChange}
+            onChange={(e) => setPasswordConfirmation(e.target.value)}
           />
         </label>
         <button type="submit">Submit</button>

@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "mutation CreatePost($title: String!, $notes: String!, $mediaType: String!, $author: ID!) {\n  createPost(\n    input: {title: $title, notes: $notes, mediaType: $mediaType, author: $author}\n  ) {\n    id\n    title\n    notes\n    mediaType\n    author {\n      id\n    }\n  }\n}": types.CreatePostDocument,
-    "query GetPosts {\n  posts {\n    id\n    title\n    notes\n    mediaType\n    createdAt\n  }\n}": types.GetPostsDocument,
+    "query GetPosts {\n  posts {\n    id\n    title\n    notes\n    mediaType\n    createdAt\n    author {\n      id\n      name\n      email\n    }\n  }\n}": types.GetPostsDocument,
 };
 
 /**
@@ -38,7 +38,7 @@ export function graphql(source: "mutation CreatePost($title: String!, $notes: St
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query GetPosts {\n  posts {\n    id\n    title\n    notes\n    mediaType\n    createdAt\n  }\n}"): (typeof documents)["query GetPosts {\n  posts {\n    id\n    title\n    notes\n    mediaType\n    createdAt\n  }\n}"];
+export function graphql(source: "query GetPosts {\n  posts {\n    id\n    title\n    notes\n    mediaType\n    createdAt\n    author {\n      id\n      name\n      email\n    }\n  }\n}"): (typeof documents)["query GetPosts {\n  posts {\n    id\n    title\n    notes\n    mediaType\n    createdAt\n    author {\n      id\n      name\n      email\n    }\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
